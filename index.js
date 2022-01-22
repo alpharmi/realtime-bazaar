@@ -17,7 +17,7 @@ function loadBazaar() {
                     product.id = i
 
                     const productName = document.createElement("h1")
-                    productName.className = "productName"
+                    productName.id = "productName"
                     productName.textContent = i.replaceAll("_", " ").replaceAll(":", " ")
                     product.appendChild(productName)
 
@@ -48,13 +48,13 @@ function loadBazaar() {
                     const profitMargin = document.createElement("h1")
                     profitMargin.className = "productProperty"
                     profitMargin.id = "profitMargin"
-                    profitMargin.textContent = "Profit Margin: 0 (0%)"
+                    profitMargin.textContent = "Profit Margin: $0"
                     product.appendChild(profitMargin)
 
                     const profitMargin1024x = document.createElement("h1")
                     profitMargin1024x.className = "productProperty"
                     profitMargin1024x.id = "profitMargin1024x"
-                    profitMargin1024x.textContent = "Profit Margin (1024x): 0 (0%)"
+                    profitMargin1024x.textContent = "Profit Margin (1024x): $0"
                     product.appendChild(profitMargin1024x)
 
                     gridContainer.appendChild(product)
@@ -71,13 +71,31 @@ function requestBazaar() {
                 lastUpdated = data.lastUpdated
 
                 const products = data.products
-                var productsSorted = []
 
                 for (i in products) {
                     const productInfo = products[i]
-                    var product = {name: productInfo.product_id}
-                    var productScore = 0
 
+                    if (productInfo.buy_summary[0] != undefined) {
+                        var productElement = document.getElementById(productInfo.product_id)
+                        var productScore = 0
+                        const productBuyPrice = productInfo.sell_summary[0].pricePerUnit
+                        const productSellPrice = productInfo.buy_summary[0].pricePerUnit
+                        const quanityBuying = productInfo.quick_status.sellOrders
+                        const quanitySelling = productInfo.quick_status.buyOrders
+                        const productMargin = (productSellPrice - productBuyPrice).toFixed(2)
+
+                        productElement.children["buyPrice"].textContent = "Buy Price: $" + String(productBuyPrice).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+                        productElement.children["sellPrice"].textContent = "Sell Price: $" + String(productSellPrice).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+                        productElement.children["quanityBuying"].textContent = "Quanity Buying: " + quanityBuying
+                        productElement.children["quanitySelling"].textContent = "Quanity Selling: " + quanitySelling
+
+                        productElement.children["profitMargin"].textContent = `Profit Margin: $${String(productMargin).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+                        productElement.children["profitMargin1024x"].textContent = `Profit Margin (1024x): $${String(productMargin * 1024).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+
+                        productScore = -(productMargin - (quanitySelling - quanityBuying))
+
+                        productElement.style.order = productScore
+                    }
                 }
             }
         })
@@ -85,4 +103,4 @@ function requestBazaar() {
 
 loadBazaar()
 
-//requestBazaar()
+requestBazaar()
