@@ -113,6 +113,7 @@ loadBazaar()
 
 function refresh() {
     setInterval(function() {
+        console.log("refreshed")
         requestBazaar()
     }, 10000)
 }
