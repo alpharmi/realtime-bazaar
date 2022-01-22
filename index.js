@@ -1,4 +1,5 @@
 const gridContainer = document.getElementById("grid-container")
+const priceCap = document.getElementById("priceCap")
 
 var lastUpdated = 0
 
@@ -15,6 +16,7 @@ function loadBazaar() {
                     product.className = "grid-item"
                     product.style.order = 999
                     product.id = i
+                    product.style.display = "none"
 
                     const productName = document.createElement("h1")
                     productName.id = "productName"
@@ -60,7 +62,6 @@ function loadBazaar() {
                     gridContainer.appendChild(product)
                 }
             }
-            console.log(data)
         })
 }
 
@@ -74,9 +75,12 @@ function requestBazaar() {
 
                 for (i in products) {
                     const productInfo = products[i]
+                    var productElement = document.getElementById(productInfo.product_id)
+
+                    productElement.style.display = "none"
 
                     if (productInfo.buy_summary[0] != undefined) {
-                        var productElement = document.getElementById(productInfo.product_id)
+
                         var productScore = 0
                         const productBuyPrice = productInfo.sell_summary[0].pricePerUnit
                         const productSellPrice = productInfo.buy_summary[0].pricePerUnit
@@ -84,17 +88,21 @@ function requestBazaar() {
                         const quanitySelling = productInfo.quick_status.buyOrders
                         const productMargin = (productSellPrice - productBuyPrice).toFixed(2)
 
-                        productElement.children["buyPrice"].textContent = "Buy Price: $" + String(productBuyPrice).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-                        productElement.children["sellPrice"].textContent = "Sell Price: $" + String(productSellPrice).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
-                        productElement.children["quanityBuying"].textContent = "Quanity Buying: " + quanityBuying
-                        productElement.children["quanitySelling"].textContent = "Quanity Selling: " + quanitySelling
+                        if (productMargin <= Number(priceCap.value)) {
+                            productElement.children["buyPrice"].textContent = "Buy Price: $" + String(productBuyPrice).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+                            productElement.children["sellPrice"].textContent = "Sell Price: $" + String(productSellPrice).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+                            productElement.children["quanityBuying"].textContent = "Quanity Buying: " + quanityBuying
+                            productElement.children["quanitySelling"].textContent = "Quanity Selling: " + quanitySelling
+    
+                            productElement.children["profitMargin"].textContent = `Profit Margin: $${String(productMargin).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+                            productElement.children["profitMargin1024x"].textContent = `Profit Margin (1024x): $${String(productMargin * 1024).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
+    
+                            productScore = -(productMargin - (quanitySelling - quanityBuying))
+    
+                            productElement.style.order = productScore
 
-                        productElement.children["profitMargin"].textContent = `Profit Margin: $${String(productMargin).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
-                        productElement.children["profitMargin1024x"].textContent = `Profit Margin (1024x): $${String(productMargin * 1024).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
-
-                        productScore = -(productMargin - (quanitySelling - quanityBuying))
-
-                        productElement.style.order = productScore
+                            productElement.style.display = "block"
+                        }
                     }
                 }
             }
@@ -103,4 +111,10 @@ function requestBazaar() {
 
 loadBazaar()
 
-requestBazaar()
+function refresh() {
+    setInterval(function() {
+        requestBazaar()
+    }, 10000)
+}
+
+refresh()

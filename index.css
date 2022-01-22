@@ -10,6 +10,12 @@ body {
     padding-left: 20px;
 }
 
+#priceCap {
+    position: absolute;
+    top:30px;
+    left: 300px;
+}
+
 #grid-container {
     height: 100%;
     padding-left: 10px;
