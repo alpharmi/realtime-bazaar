@@ -1,0 +1,85 @@
+body {
+    background-color: rgb(24, 24, 24);
+    
+    font-family: Helvetica, sans-serif;
+}
+
+#title {
+    color: white;
+
+    padding-left: 20px;
+}
+
+#priceCap {
+    position: absolute;
+    top:30px;
+    left: 300px;
+}
+
+#grid-container {
+    height: 100%;
+    padding-left: 10px;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto();
+    grid-gap: 10px;
+}
+
+.grid-item {
+    background-image: linear-gradient(rgb(31, 31, 31), rgb(41, 41, 41));
+    border-radius: 10px;
+    border: 2px solid rgb(20, 20, 20);
+
+    height: 150px;
+}
+
+#productName {
+    color: white;
+    
+    font-size: 20px;
+    padding-left: 10px;
+}
+
+.productProperty {
+    color: rgb(202, 202, 202);
+    font-weight: lighter;
+    font-size: 16px;
+
+    padding-left: 10px;
+    width: 40%;
+}
+
+#buyPrice {
+    position: relative;
+    top: -5%;
+}
+
+#sellPrice {
+    position: relative;
+    top: -10%;
+}
+
+#quanityBuying {
+    position: relative;
+    top: -44%;
+    left: 50%;
+}
+
+#quanitySelling {
+    position: relative;
+    top: -50%;
+    left: 50%;
+}
+
+#profitMargin {
+    position: relative;
+    top: -45%;
+    width: 100%;
+}
+
+#profitMargin1024x {
+    position: relative;
+    top: -50%;
+    width: 100%;
+}
