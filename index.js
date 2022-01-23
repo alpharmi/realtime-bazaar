@@ -84,8 +84,8 @@ function requestBazaar() {
                         var productScore = 0
                         const productBuyPrice = productInfo.sell_summary[0].pricePerUnit
                         const productSellPrice = productInfo.buy_summary[0].pricePerUnit
-                        const quanityBuying = productInfo.quick_status.sellOrders
-                        const quanitySelling = productInfo.quick_status.buyOrders
+                        const quanityBuying = productInfo.quick_status.buyOrders
+                        const quanitySelling = productInfo.quick_status.sellOrders
                         const productMargin = (productSellPrice - productBuyPrice).toFixed(2)
 
                         if (productMargin <= Number(priceCap.value)) {
