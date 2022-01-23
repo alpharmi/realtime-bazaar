@@ -97,7 +97,7 @@ function requestBazaar() {
                             productElement.children["profitMargin"].textContent = `Profit Margin: $${String(productMargin).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
                             productElement.children["profitMargin1024x"].textContent = `Profit Margin (1024x): $${String(productMargin * 1024).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
     
-                            productScore = -(productMargin - (quanitySelling - quanitySelling))
+                            productScore = -(productMargin - (quanitySelling - quanityBuying))
     
                             productElement.style.order = productScore
 
